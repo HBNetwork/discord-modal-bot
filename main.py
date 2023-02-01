@@ -76,8 +76,23 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
         role = discord.utils.get(interaction.guild.roles, id=1067444184048484474)  # Role ID
         await interaction.user.add_roles(role)
 
+        canal = interaction.guild.get_channel(1063428213633724427)  # ID channel
+        embed = discord.Embed(
+            title=interaction.user.id,
+            description="Descrição completa",
+            colour=14707394
+        )
+        embed.add_field(name="Usuario", value=f"<@{interaction.user.id}>", inline=False)
+        embed.add_field(name="Nome: ", value={self.name.value}, inline=False)
+        embed.add_field(name="Apelido: ", value={self.nickName.value}, inline=False)
+        embed.add_field(name="Data de nascimento: ", value={self.birthDate.value}, inline=False)
+        embed.add_field(name="Naturalidade: ", value={self.naturalness.value}, inline=False)
+        embed.add_field(name="E-mail: ", value={self.email.value}, inline=False)
+        await canal.send(embed=embed)
+
 
 @client.tree.command()
+@app_commands.default_permissions(kick_members=True)
 async def onboarding(interaction: discord.Interaction):
     await interaction.response.send_message("Mensagem.", view=View())
 
