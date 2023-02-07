@@ -31,8 +31,11 @@ class View(discord.ui.View):
         super().__init__()
         self.timeout = None
 
-    @discord.ui.button(label="Botão Normal", style=discord.ButtonStyle.blurple, disabled=False,
-                       custom_id="persistent_view:botton")
+        botao = discord.ui.Button(label="onboarding externo", url="https://www.google.com/", disabled=False)
+        self.add_item(botao)
+
+    @discord.ui.button(label="onboarding interno", style=discord.ButtonStyle.blurple, disabled=False,
+                       custom_id="persistent_view:button")
     async def modalButton(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(Onboarding())
 
@@ -46,32 +49,37 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
     )
     nickName = discord.ui.TextInput(
         label="Apelido",
-        style=discord.TextStyle.paragraph,
+        style=discord.TextStyle.short,
         placeholder="Digite seu Apelido",
         required=True,
     )
-    birthDate = discord.ui.TextInput(
-        label="Data de nascimento ",
-        style=discord.TextStyle.paragraph,
-        placeholder="Digite sua data de nascimento",
-        required=False,
-    )
     naturalness = discord.ui.TextInput(
         label="Cidade/Estado",
-        style=discord.TextStyle.paragraph,
+        style=discord.TextStyle.short,
         placeholder="exemplo Salvador/BA",
-        required=True
+        required=False,
+    )
+    phone = discord.ui.TextInput(
+        label="numero de telefone/Whatsapp",
+        style=discord.TextStyle.short,
+        placeholder="Digite seu telefone",
+        min_length=11,
+        required=True,
     )
     email = discord.ui.TextInput(
         label="E-mail",
-        style=discord.TextStyle.paragraph,
+        style=discord.TextStyle.short,
         placeholder="Digite o seu email",
-        required=True
+        required=True,
     )
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.send_message(f"nome = {self.name.value}, apelido = {self.nickName.value}, "
-                                                f"nascido em {self.birthDate.value}, de {self.naturalness.value}, "
+        name = self.name.value
+        words = [w.capitalize() for w in name.split()]
+        name = ' '.join(words)
+
+        await interaction.response.send_message(f"nome = {name}, apelido = {self.nickName.value}, "
+                                                f"nascido em {self.phone.value}, de {self.naturalness.value}, "
                                                 f"email = {self.email.value}", ephemeral=True)
         role = discord.utils.get(interaction.guild.roles, id=1067444184048484474)  # Role ID
         await interaction.user.add_roles(role)
@@ -80,21 +88,21 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
         embed = discord.Embed(
             title=interaction.user.id,
             description="Descrição completa",
-            colour=14707394
+            colour=discord.Colour.random()
         )
         embed.add_field(name="Usuario", value=f"<@{interaction.user.id}>", inline=False)
-        embed.add_field(name="Nome: ", value={self.name.value}, inline=False)
-        embed.add_field(name="Apelido: ", value={self.nickName.value}, inline=False)
-        embed.add_field(name="Data de nascimento: ", value={self.birthDate.value}, inline=False)
-        embed.add_field(name="Naturalidade: ", value={self.naturalness.value}, inline=False)
-        embed.add_field(name="E-mail: ", value={self.email.value}, inline=False)
+        embed.add_field(name="Nome: ", value=name, inline=False)
+        embed.add_field(name="Apelido: ", value=self.nickName.value, inline=False)
+        embed.add_field(name="Naturalidade: ", value=self.naturalness.value, inline=False)
+        embed.add_field(name="Numero de telefone: ", value=self.phone.value, inline=False)
+        embed.add_field(name="E-mail: ", value=self.email.value, inline=False)
         await canal.send(embed=embed)
 
 
 @client.tree.command()
 @app_commands.default_permissions(kick_members=True)
 async def onboarding(interaction: discord.Interaction):
-    await interaction.response.send_message("Mensagem.", view=View())
+    await interaction.channel.send("Mensagem.", view=View())
 
 
 load_dotenv()
