@@ -30,7 +30,7 @@ class View(discord.ui.View):
         super().__init__()
         self.timeout = None
 
-        botao = discord.ui.Button(label="onboarding externo", url="http://google.com/", disabled=False,
+        botao = discord.ui.Button(label="onboarding externo", url="https://forms.gle/zCDSZ9BkkLz4u8h19", disabled=False,
                                   custom_id="persistent_view:button_link")
         self.add_item(botao)
 
