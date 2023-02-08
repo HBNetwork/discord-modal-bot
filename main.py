@@ -1,7 +1,6 @@
-import os
 import discord
 from discord import app_commands
-from dotenv import load_dotenv
+from decouple import config
 
 id_ = 1063136274715779102  # SERVER ID
 id_server = discord.Object(id_)
@@ -31,11 +30,12 @@ class View(discord.ui.View):
         super().__init__()
         self.timeout = None
 
-        botao = discord.ui.Button(label="onboarding externo", url="https://www.google.com/", disabled=False)
+        botao = discord.ui.Button(label="onboarding externo", url="http://google.com/", disabled=False,
+                                  custom_id="persistent_view:button_link")
         self.add_item(botao)
 
     @discord.ui.button(label="onboarding interno", style=discord.ButtonStyle.blurple, disabled=False,
-                       custom_id="persistent_view:button")
+                       custom_id="persistent_view:button_modal")
     async def modalButton(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(Onboarding())
 
@@ -105,6 +105,5 @@ async def onboarding(interaction: discord.Interaction):
     await interaction.channel.send("Mensagem.", view=View())
 
 
-load_dotenv()
-TOKEN = os.getenv("TOKEN")  # BOT TOKEN https://discord.com/developers/applications/
+TOKEN = config('SECRET_KEY')  # BOT TOKEN https://discord.com/developers/applications/
 client.run(TOKEN)
