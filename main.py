@@ -30,9 +30,9 @@ class View(discord.ui.View):
         super().__init__()
         self.timeout = None
 
-        botao = discord.ui.Button(label="onboarding externo", url="https://forms.gle/zCDSZ9BkkLz4u8h19", disabled=False,
-                                  custom_id="persistent_view:button_link")
-        self.add_item(botao)
+        self.botao = discord.ui.Button(label="onboarding externo", url="https://forms.gle/zCDSZ9BkkLz4u8h19",
+                                       disabled=False)
+        self.add_item(self.botao)
 
     @discord.ui.button(label="onboarding interno", style=discord.ButtonStyle.blurple, disabled=False,
                        custom_id="persistent_view:button_modal")
