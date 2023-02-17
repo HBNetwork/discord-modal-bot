@@ -78,9 +78,8 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
         words = [w.capitalize() for w in name.split()]
         name = ' '.join(words)
 
-        await interaction.response.send_message(f"nome = {name}, apelido = {self.nickName.value}, "
-                                                f"nascido em {self.phone.value}, de {self.naturalness.value}, "
-                                                f"email = {self.email.value}", ephemeral=True)
+        await interaction.response.send_message(f"",
+                                                ephemeral=True)
         role = discord.utils.get(interaction.guild.roles, id=1067444184048484474)  # Role ID
         await interaction.user.add_roles(role)
 
