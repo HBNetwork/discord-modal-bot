@@ -51,13 +51,12 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
         name = self.name.value.capitalize()
         words = [w.capitalize() for w in name.split()]
         name = ' '.join(words)
-        name = str(name).replace(' ', '%20')
 
         if not emailValid(self.email.value):
             await interaction.response.send_message("Email Invalido.", ephemeral=True)
         else:
             await interaction.response.send_message(
-                f"[Formulario](https://docs.google.com/forms/d/e/1FAIpQLSco5asfmgmCqZaoBwMaKoUIk-lUC63nbAW1R5cNGG8k-5woPw/viewform?usp=pp_url&entry.546964655={interaction.user.id}&entry.516220657={self.email.value}&entry.1409361470={name}&entry.28498539={interaction.user.name}).",
+                f"[Formulario](https://docs.google.com/forms/d/e/1FAIpQLSco5asfmgmCqZaoBwMaKoUIk-lUC63nbAW1R5cNGG8k-5woPw/viewform?usp=pp_url&entry.546964655={interaction.user.id}&entry.516220657={self.email.value}&entry.1409361470={name.replace(' ', '%20')}&entry.28498539={interaction.user.name}).",
                 ephemeral=True)
 
             role = discord.utils.get(interaction.guild.roles, id=1067444184048484474)  # Role ID
@@ -71,6 +70,7 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
             )
 
             embed.add_field(name="Usuario", value=f"<@{interaction.user.id}>", inline=False)
+            embed.add_field(name="Nome completo: ", value=self.name.value, inline=False)
             embed.add_field(name="E-mail: ", value=self.email.value, inline=False)
             await canal.send(embed=embed)
 

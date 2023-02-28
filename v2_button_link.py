@@ -22,11 +22,6 @@ class MyClient(discord.Client):
 client = MyClient(intents=discord.Intents.default())
 
 
-@client.event
-async def on_ready():
-    print("O bot está funcionando!")
-
-
 class View(discord.ui.View):
     def __init__(self):
         super().__init__()
@@ -36,7 +31,6 @@ class View(discord.ui.View):
                        custom_id="persistent_view:button_modal")
     async def modalButton(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(Onboarding())
-        await interaction.response.send_modal()
 
 
 class ButtonResponseView(discord.ui.View):
@@ -72,7 +66,7 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
         if not emailValid(self.email.value):
             await interaction.response.send_message("Email Invalido.", ephemeral=True)
         else:
-            await interaction.response.send_message(f"nome = {name}, email = {self.email.value}",
+            await interaction.response.send_message(f"Mensagem de resposta. EX: nome = {name}, email = {self.email.value}",
                                                     view=ButtonResponseView(), ephemeral=True)
 
             role = discord.utils.get(interaction.guild.roles, id=1067444184048484474)  # Role ID
@@ -86,6 +80,7 @@ class Onboarding(discord.ui.Modal, title="Onboarding - HBNetwork"):
             )
 
             embed.add_field(name="Usuario", value=f"<@{interaction.user.id}>", inline=False)
+            embed.add_field(name="Nome completo: ", value=self.name.value, inline=False)
             embed.add_field(name="E-mail: ", value=self.email.value, inline=False)
             await canal.send(embed=embed)
 
